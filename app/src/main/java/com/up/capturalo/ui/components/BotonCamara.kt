@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -21,12 +23,12 @@ import com.up.capturalo.R
 
 @Composable
 fun BotonCamara(){
-    Card (
+    Button (
         modifier = Modifier
             .width(175.dp)
             .height(50.dp),
         shape = RoundedCornerShape(6.dp),
-        colors = CardDefaults.cardColors(
+        colors = ButtonDefaults.buttonColors(
             containerColor = Color.Blue
         ),
         onClick = {}
