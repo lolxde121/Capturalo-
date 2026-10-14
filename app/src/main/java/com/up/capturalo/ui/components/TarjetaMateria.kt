@@ -1,6 +1,7 @@
 package com.up.capturalo.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,36 +39,34 @@ fun TarjetaMateria(
             .width(225.dp)
             .height(200.dp)
             .padding(8.dp),
-        onClick = onClick
+        onClick = onClick,
+        elevation = CardDefaults.cardElevation(50.dp)
     ) {
         Column {
+            // color de la materia
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(10.dp)
                     .background(parseoColor(materia.color))
             )
-            Text(materia.nombre, style = MaterialTheme.typography.titleLarge)
-            Text(materia.profesor, style = MaterialTheme.typography.titleMedium)
-            Surface(
-                modifier = Modifier
-                .width(100.dp)
-                .height(20.dp),
-                shape = RoundedCornerShape(10.dp),
-                color = Color.Gray
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
             ) {
-                Column(modifier = Modifier
-                    .fillMaxSize().padding(25.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(2.dp),
-                        text = "Capturas: $totalCapturas",
-                        fontSize = 12.sp,
-                        textAlign = TextAlign.Start
-                    )
-                }
-
+                // info de la materia
+                Text(materia.nombre, style = MaterialTheme.typography.titleLarge)
+                Text(materia.profesor, style = MaterialTheme.typography.titleMedium)
+                // badge para mostrar las capturas
+                PildoraGris( Modifier
+                    .padding(top = 55.dp)
+                    .width(100.dp)
+                    .height(20.dp)
+                    ,
+                    "Capturas: $totalCapturas"
+                )
             }
+
         }
     }
 }
