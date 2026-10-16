@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.up.capturalo.data.dataSeed
 import com.up.capturalo.data.models.Materia
 import com.up.capturalo.utils.toComposeColor
 
@@ -69,7 +68,7 @@ fun TarjetaMateria(
 @Composable
 fun TarjetaMateriaPreview(){
     TarjetaMateria(
-        materia = dataSeed.materiasIniciales[0],
+        materia = Materia(1, "Calculo Multivariable", "Prof. Sirgei", "00FF00"),
         totalCapturas = 5,
         onClick = {}
     )

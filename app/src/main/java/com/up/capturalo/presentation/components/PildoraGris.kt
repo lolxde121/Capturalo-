@@ -16,13 +16,14 @@ fun PildoraGris(modifier: Modifier = Modifier, texto : String){
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(10.dp),
-        color = Color.Gray
+        color = Color.LightGray
     ) {
         Text(
             modifier = Modifier.padding(2.dp),
             text = texto,
+            color = Color.White,
             fontSize = 12.sp,
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Center
         )
 
     }
