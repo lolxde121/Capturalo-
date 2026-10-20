@@ -2,6 +2,7 @@ package com.up.capturalo.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,16 +19,18 @@ import androidx.compose.ui.unit.dp
 import com.up.capturalo.R
 
 @Composable
-fun BotonCamara(){
+fun BotonCamara(
+    onClick: () -> Unit = {}
+){
     Button (
         modifier = Modifier
-            .width(175.dp)
-            .height(50.dp),
+            .fillMaxWidth()
+            .height(75.dp),
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Blue
         ),
-        onClick = {}
+        onClick = onClick
     ) {
         Column(modifier = Modifier
             .fillMaxSize(),

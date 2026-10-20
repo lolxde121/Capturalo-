@@ -18,37 +18,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Botón stateless que notifica al padre cuando el usuario quiere agregar una materia.
+ *
+ * @param onClick Lambda emitida al pulsar el botón.
+ */
 @Composable
-fun BotonAgregarMateria(){
-    Button (
+fun BotonAgregarMateria(
+    onClick: () -> Unit = {}
+) {
+    Button(
         modifier = Modifier
-            .width(150.dp)
+            .width(175.dp)
             .height(50.dp),
-        shape = RoundedCornerShape(6.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Green
-        ),
-        onClick = {}
+        shape  = RoundedCornerShape(6.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
+        onClick = onClick,
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(2.dp),
+        Column(
+            modifier            = Modifier
+                .fillMaxSize()
+                .padding(2.dp),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
-        ){
+            verticalArrangement = Arrangement.Center,
+        ) {
             Text(
-                text = "+ Agregar Materia",
+                text  = "+ Agregar Materia",
                 color = Color.White,
-                style = MaterialTheme.typography.labelSmall
+                style = MaterialTheme.typography.labelSmall,
             )
-
         }
-
     }
 }
+
 @Preview
 @Composable
-fun BotonAgMateriaPreview(){
+fun BotonAgMateriaPreview() {
     BotonAgregarMateria()
-
 }

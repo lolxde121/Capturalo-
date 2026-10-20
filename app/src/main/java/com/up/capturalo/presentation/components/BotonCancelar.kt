@@ -3,6 +3,7 @@ package com.up.capturalo.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,11 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BotonCancelar(){
+fun BotonCancelar(
+    texto: String
+){
     Button (
         modifier = Modifier
-            .width(175.dp)
-            .height(50.dp),
+            .padding(5.dp)
+            .fillMaxWidth()
+            .height(75  .dp),
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Red
@@ -37,7 +41,7 @@ fun BotonCancelar(){
             verticalArrangement = Arrangement.Center
         ){
             Text(
-                text = "Cancelar",
+                text = texto,
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )
@@ -50,6 +54,6 @@ fun BotonCancelar(){
 @Preview
 @Composable
 fun BotonCancelarPreview(){
-    BotonCancelar()
+    BotonCancelar("Cancelar")
 
 }

@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TopBarBlue(){
+fun TopBarBlue(
+    texto: String
+){
     Card (
         modifier = Modifier
             .padding(5.dp)
@@ -41,7 +43,7 @@ fun TopBarBlue(){
             verticalArrangement = Arrangement.Center
         ){
             Text(
-                text = "Capturalo!",
+                text = texto,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge
@@ -54,5 +56,5 @@ fun TopBarBlue(){
 @Preview
 @Composable
 fun TopBarBluePreview(){
-    TopBarBlue()
+    TopBarBlue("cap")
 }
