@@ -116,7 +116,7 @@ fun HomeUiScreen(
                         val materia = uiState.materias[index]
                         TarjetaMateria(
                             materia       = materia,
-                            totalCapturas = 0, // TODO: conectar con capturas reales
+                            totalCapturas = uiState.totalCapturas(materia.id),
                             onClick       = { onMateriaClick(materia) },
                             onEditar      = onEditarMateria,
                             onEliminar    = onEliminarMateria,

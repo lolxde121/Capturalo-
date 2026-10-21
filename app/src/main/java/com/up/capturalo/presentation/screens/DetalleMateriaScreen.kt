@@ -24,38 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.up.capturalo.data.models.Captura
 import com.up.capturalo.data.models.Materia
+import com.up.capturalo.presentation.components.BotonCamara
 import com.up.capturalo.presentation.components.BotonCancelar
 import com.up.capturalo.presentation.components.CapturaItem
 
-/**
- * Pantalla de detalle de una materia (100% Stateless).
- *
- * CONCEPTOS CLAVE DE ARQUITECTURA:
- * 1. UI Stateless y State Hoisting:
- *    - La pantalla no mantiene ningún estado propio (`remember`, mutaciones, etc.) ni conoce ViewModels.
- *    - Recibe el estado desde fuera ([materia], [capturas]) y delega cualquier interacción
- *      hacia el exterior mediante funciones lambda ([onCapturaClick], [onSalirClick]).
- *    - Esto hace que el componente sea altamente reutilizable, predecible y fácil de probar/previsualizar.
- *
- * 2. Manejo de eventos con Lambdas:
- *    - `onCapturaClick: (Captura) -> Unit`: Comunica al invocador cuál captura fue presionada pasando
- *      el modelo como argumento, permitiendo navegar o abrir un visor.
- *    - `onSalirClick: () -> Unit`: Comunica la intención de volver atrás o cerrar la vista.
- *
- * 3. LazyVerticalGrid y weight(1f):
- *    - `LazyVerticalGrid`: A diferencia de una columna o fila regular, una lista/grilla "Lazy" (perezosa)
- *      solo compone y renderiza los elementos visibles en pantalla. Esto garantiza un rendimiento
- *      óptimo y un consumo de memoria mínimo al manejar colecciones grandes de imágenes.
- *    - `Modifier.weight(1f)` dentro de un `Column`: Indica al sistema de diseño que este componente
- *      debe expandirse para ocupar todo el espacio vertical sobrante después de medir el Header
- *      y el Botón inferior. De este modo, la grilla aprovecha todo el centro de la pantalla y
- *      el botón de "Salir" queda fijado en la parte inferior sin salir del límite de la pantalla.
- */
 @Composable
 fun DetalleMateriaScreen(
     materia: Materia,
     capturas: List<Captura>,
     onCapturaClick: (Captura) -> Unit,
+    onTomarFotoClick: () -> Unit = {},
     onSalirClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -132,9 +110,17 @@ fun DetalleMateriaScreen(
             }
         }
 
-        // ── 3. Botón Inferior: Salir ──────────────────────────────────────────
+        // ── 3. Botón de Cámara para esta materia ──────────────────────────────
+        BotonCamara(
+            onClick = onTomarFotoClick
+        )
+
+        // ── 4. Botón Inferior: Salir ──────────────────────────────────────────
         // Botón rojo (#FF0000) de ancho completo para salir o regresar de la pantalla.
-        BotonCancelar("Salir")
+        BotonCancelar(
+            texto = "Salir",
+            onClick = onSalirClick
+        )
     }
 }
 

@@ -1,22 +1,50 @@
 package com.up.capturalo.presentation.viewmodel
 
+import com.up.capturalo.data.models.Captura
 import com.up.capturalo.data.models.Materia
 
 /**
- * Estado visual completo de la pantalla Home.
- * El ViewModel siempre emite un nuevo objeto inmutable;
- * la UI sólo recompone lo que cambió.
+ * Enumeración que representa la pantalla visible actualmente en la navegación de la aplicación.
+ */
+enum class PantallaActual {
+    HOME,
+    AGREGAR,
+    DETALLE,
+    TOMAR_FOTO
+}
+
+/**
+ * Estado visual completo e inmutable de la aplicación (MVI / StateFlow).
+ *
+ * CONCEPTOS EDUCATIVOS:
+ * 1. Single Source of Truth (Fuente única de la verdad):
+ *    Todo el estado de la UI (datos, navegación, diálogos, formularios y estados de carga)
+ *    está centralizado en esta data class inmutable.
+ * 2. Unidirectional Data Flow (UDF):
+ *    La UI observa este estado y emite eventos (lambdas) hacia el ViewModel; el ViewModel
+ *    procesa la lógica de negocio y emite un nuevo `HomeUiState` mediante `copy()`.
  */
 data class HomeUiState(
-    /** Lista de materias a mostrar. */
+    /** Pantalla que se debe renderizar en la vista principal. */
+    val pantallaActual: PantallaActual = PantallaActual.HOME,
+
+    /** Lista de materias leídas en tiempo real desde DataStore. */
     val materias: List<Materia> = emptyList(),
 
-    /** Controla si el diálogo de Agregar/Editar está visible. */
+    /** Materia seleccionada actualmente para visualizar en [DetalleMateriaScreen]. */
+    val materiaSeleccionada: Materia? = null,
+
+    /** Capturas asociadas a la materia seleccionada. */
+    val capturas: List<Captura> = emptyList(),
+
+    /** Registro de todas las capturas existentes en persistencia (para conteo en Home). */
+    val todasLasCapturas: List<Captura> = emptyList(),
+
+    /** Controla si el diálogo modal de Agregar/Editar en Home está visible. */
     val mostrarDialogo: Boolean = false,
 
     /**
-     * Materia que se está editando. Si es `null`, el diálogo
-     * opera en modo "Agregar".
+     * Materia que se está editando. Si es `null`, opera en modo "Agregar".
      */
     val materiaEnEdicion: Materia? = null,
 
@@ -32,9 +60,12 @@ data class HomeUiState(
     /** Mensaje de error a mostrar en Snackbar; null = sin error. */
     val error: String? = null,
 
-    /** Indica si hay una operación en curso. */
+    /** Indica si hay una operación asíncrona en curso. */
     val cargando: Boolean = false,
-)
+) {
+    /** Obtiene el conteo exacto de capturas vinculadas a una materia específica */
+    fun totalCapturas(idMateria: Int): Int = todasLasCapturas.count { it.idMateria == idMateria }
+}
 
 /** Paleta de colores predefinidos para el selector. */
 val coloresDisponibles = listOf(

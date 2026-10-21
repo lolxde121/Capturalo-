@@ -46,6 +46,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+
+    // Jetpack DataStore Preferences (persistencia asíncrona clave-valor basada en Coroutines y Flow)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    // Google Gson (serialización y deserialización de listas/objetos a JSON)
+    implementation("com.google.code.gson:gson:2.11.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

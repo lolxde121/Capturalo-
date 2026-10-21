@@ -21,18 +21,19 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BotonCancelar(
-    texto: String
+    texto: String,
+    onClick: () -> Unit = {}
 ){
     Button (
         modifier = Modifier
             .padding(5.dp)
             .fillMaxWidth()
-            .height(75  .dp),
+            .height(75.dp),
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Red
         ),
-        onClick = {}
+        onClick = onClick
     ) {
         Column(modifier = Modifier
             .fillMaxSize()

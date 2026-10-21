@@ -5,7 +5,7 @@ import com.up.capturalo.di.AppModule
 
 /**
  * Application personalizada que aloja el [AppModule] como singleton global.
- * Recuerda registrarla en AndroidManifest.xml:
+ * Registrada en AndroidManifest.xml:
  *   android:name=".CapturaloApplication"
  */
 class CapturaloApplication : Application() {
@@ -16,6 +16,7 @@ class CapturaloApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appModule = AppModule()
+        // Inicializamos AppModule pasando `this` (Application Context global)
+        appModule = AppModule(this)
     }
 }
