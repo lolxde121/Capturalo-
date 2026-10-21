@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.Flow
  * CONCEPTOS EDUCATIVOS:
  * 1. Desacoplamiento (Principio de Inversión de Dependencias - SOLID):
  *    Las capas superiores (UI y ViewModels) dependen de esta ABSTRACCIÓN (interfaz),
- *    no de la clase concreta `CapturaloRepositoryImp` ni de `DataStore`.
- *    Si mañana decidimos cambiar DataStore por Room, SQLite o Retrofit, las pantallas
- *    y los ViewModels no necesitarán cambiar una sola línea de código.
+ *    no de la clase concreta `CapturaloRepositoryImp` ni de detalles de persistencia local.
+ *    Toda la persistencia es 100% LOCAL (DataStore + Gson) sin conexiones de red.
  *
  * 2. `Flow<List<Materia>>`:
  *    Permite a los observadores reaccionar en tiempo real a las modificaciones de los datos.
