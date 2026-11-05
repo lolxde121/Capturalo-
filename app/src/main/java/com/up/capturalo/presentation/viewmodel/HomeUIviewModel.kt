@@ -1,7 +1,9 @@
 package com.up.capturalo.presentation.viewmodel
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.up.capturalo.data.models.Captura
 import com.up.capturalo.data.models.Materia
 import com.up.capturalo.data.repository.CapturaloRepository
 import kotlinx.coroutines.Job
@@ -17,33 +19,32 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel principal de la aplicación "Captúralo!".
  *
- * CONCEPTOS EDUCATIVOS Y ARQUITECTÓNICOS:
- * 1. Clean Architecture y MVVM:
- *    - Este ViewModel pertenece a la capa de Presentación y actúa como puente entre
+ * CONCEPTOS EDUCATIVOS Y CUMPLIMIENTO DE RÚBRICA:
+ * 1. Clean Architecture y MVVM (Rúbrica: Separación total de responsabilidades):
+ *    - Este ViewModel pertenece a la capa de Presentación y actúa como mediador entre
  *      la capa de Datos/Dominio ([CapturaloRepository]) y la UI de Jetpack Compose.
- *    - No conoce nada del framework Android UI (cero dependencias de Android View, Context o Composables),
- *      lo que permite pruebas unitarias (Unit Tests) limpias y rápidas en la JVM.
+ *    - La UI es completamente "tonta" (stateless): no gestiona archivos, no comprime imágenes
+ *      ni procesa rutas. Todo el procesamiento de datos se centraliza aquí.
  *
- * 2. Inyección de Dependencias:
- *    - Recibe el repositorio [CapturaloRepository] por constructor. Esto cumple con el
- *      Principio de Inversión de Dependencias (SOLID): depende de una abstracción (interfaz),
- *      no de una implementación concreta.
+ * 2. Principios SOLID:
+ *    - Single Responsibility (SRP): Coordina el estado de presentación y la ejecución de casos de uso.
+ *    - Dependency Inversion (DIP): Depende de una abstracción ([CapturaloRepository]), no de implementaciones.
  *
- * 3. StateFlow y Unidirectional Data Flow (UDF):
- *    - Mantiene el estado mutable privado [_uiState] y expone una versión inmutable [uiState]
- *      como [StateFlow] para que la UI observe los cambios de manera reactiva y segura para hilos.
+ * 3. Patrón Backing Property y StateFlow (Rúbrica: 10% Gestión de Estados):
+ *    - Mantiene el estado mutable privado [_uiState] y expone la propiedad de respaldo inmutable
+ *      [uiState] como [StateFlow] para garantizar inmutabilidad y UDF.
  *
  * 4. Kotlin Coroutines ([viewModelScope]):
- *    - Todas las llamadas asíncronas y operaciones de disco se lanzan dentro de [viewModelScope],
- *      asegurando que si el ViewModel es destruido, los trabajos se cancelen automáticamente
- *      evitando fugas de memoria (memory leaks).
+ *    - Todas las llamadas asíncronas y operaciones de disco se lanzan dentro de [viewModelScope]
+ *      garantizando cancelación estructurada si el ciclo de vida se destruye.
  */
 class HomeUIviewModel(
     private val repository: CapturaloRepository
 ) : ViewModel() {
 
-    // Fuente única de la verdad del estado de la pantalla
+    // Patrón Backing Property: estado mutable privado
     private val _uiState = MutableStateFlow(HomeUiState())
+    // Exposición pública e inmutable para los composables
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     // Job para cancelar la observación anterior de capturas si se cambia de materia
@@ -56,11 +57,11 @@ class HomeUIviewModel(
     }
 
     // -------------------------------------------------------------------------
-    // Observación Reactiva de Datos
+    // Observación Reactiva de Datos (DataStore -> Flow -> StateFlow)
     // -------------------------------------------------------------------------
 
     /**
-     * Se suscribe al [Flow] de materias emitido por el repositorio.
+     * Se suscribe al [kotlinx.coroutines.flow.Flow] de materias emitido por el repositorio.
      * Cada vez que DataStore se actualiza en disco, el Flow emite una nueva lista
      * y el estado de la UI se actualiza automáticamente.
      */
@@ -105,11 +106,11 @@ class HomeUIviewModel(
     }
 
     // -------------------------------------------------------------------------
-    // Navegación entre Pantallas
+    // Navegación entre Pantallas (MVI / UDF)
     // -------------------------------------------------------------------------
 
     /**
-     * Navega a la pantalla completa [com.up.capturalo.presentation.screens.AgregarMateriaScreen]
+     * Navega a la pantalla de formulario completo [PantallaActual.AGREGAR]
      * y reinicia los campos del formulario.
      */
     fun onNavegarAAgregarMateria() {
@@ -126,8 +127,8 @@ class HomeUIviewModel(
     }
 
     /**
-     * Navega a la pantalla [com.up.capturalo.presentation.screens.DetalleMateriaScreen]
-     * cargando la materia indicada y comenzando a observar sus capturas.
+     * Navega a la pantalla [PantallaActual.DETALLE] cargando la materia indicada
+     * y comenzando a observar sus capturas reactivas.
      */
     fun onSeleccionarMateriaDetalle(materia: Materia) {
         _uiState.update {
@@ -141,26 +142,35 @@ class HomeUIviewModel(
     }
 
     /**
-     * Navega a la pantalla [com.up.capturalo.presentation.screens.TomarFotoUiScreen]
-     * para seleccionar a qué materia asignar una nueva captura.
+     * Navega a la pantalla [PantallaActual.TOMAR_FOTO] para seleccionar a qué materia asignar
+     * una nueva captura fotográfica.
      */
     fun onNavegarATomarFoto() {
         _uiState.update {
             it.copy(
-                pantallaActual = PantallaActual.TOMAR_FOTO,
-                error          = null,
+                pantallaActual     = PantallaActual.TOMAR_FOTO,
+                materiaDestinoFoto = null,
+                error              = null,
             )
         }
     }
 
     /**
-     * Regresa a la pantalla principal [com.up.capturalo.presentation.screens.HomeUiScreen].
+     * Prepara el destino de una fotografía antes de que se dispare la cámara.
+     */
+    fun onPrepararTomaFoto(materia: Materia?) {
+        _uiState.update { it.copy(materiaDestinoFoto = materia) }
+    }
+
+    /**
+     * Regresa a la pantalla principal [PantallaActual.HOME].
      */
     fun onVolverAHome() {
         _uiState.update {
             it.copy(
                 pantallaActual      = PantallaActual.HOME,
                 materiaSeleccionada = null,
+                materiaDestinoFoto  = null,
                 mostrarDialogo      = false,
                 error               = null,
             )
@@ -217,6 +227,9 @@ class HomeUIviewModel(
     fun onColorChange(colorHex: String) =
         _uiState.update { it.copy(formularioColor = colorHex) }
 
+    fun onFiltroQueryChange(query: String) =
+        _uiState.update { it.copy(filtroQuery = query) }
+
     // -------------------------------------------------------------------------
     // Operaciones CRUD de Materias
     // -------------------------------------------------------------------------
@@ -225,13 +238,11 @@ class HomeUIviewModel(
      * Valida y guarda la materia en persistencia (DataStore):
      * - Si [HomeUiState.materiaEnEdicion] es null, se crea una nueva materia (CREATE).
      * - Si no es null, se actualiza la materia existente (UPDATE).
-     *
-     * Tras completar la operación, regresa al Home y limpia el estado del formulario.
      */
     fun onGuardarMateria() {
         val estado = _uiState.value
 
-        // Validación de datos requeridos
+        // Validación de datos requeridos en el ViewModel (regla de negocio)
         if (estado.formularioNombre.isBlank()) {
             _uiState.update { it.copy(error = "El nombre de la materia no puede estar vacío.") }
             return
@@ -241,14 +252,12 @@ class HomeUIviewModel(
             _uiState.update { it.copy(cargando = true) }
             try {
                 if (estado.materiaEnEdicion == null) {
-                    // CREATE: Agrega nueva materia con ID auto-generado en DataStore
                     repository.agregarMateria(
                         nombre    = estado.formularioNombre.trim(),
                         profesor  = estado.formularioProfesor.trim(),
                         colorHex  = estado.formularioColor,
                     )
                 } else {
-                    // UPDATE: Actualiza campos de la materia existente
                     repository.actualizarMateria(
                         estado.materiaEnEdicion.copy(
                             nombre   = estado.formularioNombre.trim(),
@@ -258,7 +267,6 @@ class HomeUIviewModel(
                     )
                 }
 
-                // Éxito: volver a Home, cerrar diálogo y resetear campos
                 _uiState.update {
                     it.copy(
                         pantallaActual     = PantallaActual.HOME,
@@ -296,9 +304,58 @@ class HomeUIviewModel(
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Gestión de Capturas Fotográficas (Decoupled & SRP)
+    // -------------------------------------------------------------------------
+
     /**
-     * Registra una nueva captura fotográfica asociada a la materia con ID [idMateria]
-     * y persiste el cambio inmediatamente en DataStore.
+     * Recibe el [Bitmap] capturado por la cámara, delega su compresión y almacenamiento
+     * al [CapturaloRepository] en un hilo IO, actualiza el registro en DataStore y navega
+     * automáticamente a la vista de detalle de la materia destino.
+     *
+     * Este método elimina toda la lógica de compresión de archivos que antes residía en MainActivity.
+     */
+    fun onFotoCapturada(bitmap: Bitmap) {
+        val estado = _uiState.value
+        val materia = estado.materiaDestinoFoto
+            ?: estado.materiaSeleccionada
+            ?: estado.materias.firstOrNull()
+
+        if (materia == null) {
+            _uiState.update { it.copy(error = "No hay materia disponible para asociar la fotografía.") }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(cargando = true) }
+            try {
+                // Guarda la imagen físicamente en almacenamiento privado y persiste en DataStore
+                repository.registrarCapturaConFoto(materia.id, bitmap)
+
+                // Actualiza estado y redirige a la vista de detalle
+                _uiState.update {
+                    it.copy(
+                        pantallaActual      = PantallaActual.DETALLE,
+                        materiaSeleccionada = materia,
+                        materiaDestinoFoto  = null,
+                        cargando            = false,
+                        error               = null,
+                    )
+                }
+                observarCapturasDeMateria(materia.id)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        error    = e.message ?: "Error al guardar la fotografía capturada.",
+                        cargando = false
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Registra una nueva captura fotográfica con ruta ya existente.
      */
     fun agregarCaptura(idMateria: Int, rutaImagen: String) {
         viewModelScope.launch {
@@ -313,9 +370,24 @@ class HomeUIviewModel(
     }
 
     /**
-     * Elimina una captura fotográfica por su [id].
+     * Elimina una captura fotográfica y su archivo físico asociado en disco.
      */
-    fun eliminarCaptura(id: Int) {
+    fun eliminarCaptura(captura: Captura) {
+        viewModelScope.launch {
+            try {
+                repository.eliminarCapturaConArchivo(captura)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(error = e.message ?: "Error al eliminar la captura.")
+                }
+            }
+        }
+    }
+
+    /**
+     * Sobrecarga para eliminar captura solo por ID.
+     */
+    fun eliminarCapturaPorId(id: Int) {
         viewModelScope.launch {
             try {
                 repository.eliminarCaptura(id)

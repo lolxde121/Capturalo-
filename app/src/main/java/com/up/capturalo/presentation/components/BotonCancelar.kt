@@ -1,12 +1,10 @@
 package com.up.capturalo.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,39 +20,35 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BotonCancelar(
     texto: String,
-    onClick: () -> Unit = {}
-){
-    Button (
-        modifier = Modifier
-            .padding(5.dp)
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        modifier = modifier
+            .padding(vertical = 4.dp)
             .fillMaxWidth()
-            .height(75.dp),
-        shape = RoundedCornerShape(6.dp),
+            .height(64.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Red
+            containerColor = MaterialTheme.colorScheme.error
         ),
         onClick = onClick
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             Text(
                 text = texto,
                 color = Color.White,
                 style = MaterialTheme.typography.titleMedium
             )
-
         }
-
     }
-
 }
+
 @Preview
 @Composable
-fun BotonCancelarPreview(){
+fun BotonCancelarPreview() {
     BotonCancelar("Cancelar")
-
 }

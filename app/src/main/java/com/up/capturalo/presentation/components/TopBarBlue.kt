@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,42 +18,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun TopBarBlue(
-    texto: String
-){
-    Card (
-        modifier = Modifier
-            .padding(5.dp)
+    texto: String,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .padding(4.dp)
             .fillMaxWidth()
-            .height(75.dp),
-        shape = RoundedCornerShape(6.dp),
+            .height(68.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Blue
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        onClick = {}
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
             Text(
                 text = texto,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge
             )
-
         }
-
     }
 }
+
 @Preview
 @Composable
-fun TopBarBluePreview(){
-    TopBarBlue("cap")
+fun TopBarBluePreview() {
+    TopBarBlue("Capturalo!")
 }

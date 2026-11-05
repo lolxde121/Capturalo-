@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.up.capturalo.R
@@ -24,7 +25,7 @@ import java.io.File
  * Renderiza una captura fotográfica individual en la cuadrícula de Detalle.
  *
  * Si la captura contiene una ruta de archivo local válida ([Captura.rutaImagen]),
- * decodifica el archivo a Bitmap. De lo contrario, muestra la imagen de muestra por defecto.
+ * decodifica el archivo a Bitmap de forma eficiente. De lo contrario, muestra la imagen por defecto.
  */
 @Composable
 fun CapturaItem(
@@ -52,14 +53,14 @@ fun CapturaItem(
         if (bitmap != null) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = "Foto capturada",
+                contentDescription = stringResource(R.string.cd_foto_capturada),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
         } else {
             Image(
                 painter = painterResource(id = R.drawable.ejmploimg),
-                contentDescription = "Imagen de la captura de ejemplo",
+                contentDescription = stringResource(R.string.cd_foto_ejemplo),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )

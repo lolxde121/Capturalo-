@@ -9,17 +9,19 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.up.capturalo.R
 import com.up.capturalo.data.models.Materia
 import com.up.capturalo.presentation.components.BotonCancelar
 import com.up.capturalo.presentation.components.TarjetaMateria
 import com.up.capturalo.presentation.components.TopBarBlue
 
 /**
- * Pantalla que permite al usuario seleccionar a qué materia asignar la nueva captura fotográfica.
+ * Pantalla 100% stateless que permite al usuario seleccionar a qué materia asignar la nueva captura fotográfica.
  *
- * @param materias Lista de materias activas disponibles.
+ * @param materias Lista de materias disponibles.
  * @param totalCapturasProvider Función que retorna el conteo de capturas de una materia por su ID.
  * @param onMateriaClick Lambda que recibe la materia seleccionada para disparar la cámara.
  * @param onCancelarClick Lambda para cancelar el flujo y regresar a la pantalla principal.
@@ -29,22 +31,22 @@ fun TomarFotoUiScreen(
     materias: List<Materia>,
     totalCapturasProvider: (Int) -> Int = { 0 },
     onMateriaClick: (Materia) -> Unit,
-    onCancelarClick: () -> Unit = {}
+    onCancelarClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         topBar = {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-            ) { TopBarBlue("Selecciona la Ubicación") }
+            Column(modifier = Modifier.fillMaxWidth()) {
+                TopBarBlue(stringResource(R.string.header_selecciona_ubicacion))
+            }
         }
     ) { paddingValues ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Cuadrícula de materias disponibles como destino
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.weight(1f)
@@ -59,7 +61,7 @@ fun TomarFotoUiScreen(
                 }
             }
             BotonCancelar(
-                texto = "Cancelar",
+                texto = stringResource(R.string.btn_cancelar),
                 onClick = onCancelarClick
             )
         }

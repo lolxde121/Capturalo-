@@ -17,14 +17,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.up.capturalo.data.models.Materia
+import com.up.capturalo.R
 import com.up.capturalo.presentation.viewmodel.coloresDisponibles
 
 /**
- * Diálogo 100% stateless para crear o editar una [Materia].
+ * Diálogo 100% stateless para crear o editar una [com.up.capturalo.data.models.Materia].
  *
  * @param titulo            Texto del encabezado ("Agregar Materia" / "Editar Materia").
  * @param nombre            Valor actual del campo nombre.
@@ -71,7 +72,7 @@ fun DialogoMateria(
                 TextFieldFormulario(
                     valor         = nombre,
                     onValueChange = onNombreChange,
-                    label         = "Nombre de la materia",
+                    label         = stringResource(R.string.label_nombre_materia),
                     modifier      = Modifier.fillMaxWidth(),
                 )
 
@@ -79,13 +80,13 @@ fun DialogoMateria(
                 TextFieldFormulario(
                     valor         = profesor,
                     onValueChange = onProfesorChange,
-                    label         = "Nombre del profesor",
+                    label         = stringResource(R.string.label_nombre_profesor),
                     modifier      = Modifier.fillMaxWidth(),
                 )
 
                 // Selector de color
                 Text(
-                    text  = "Color:",
+                    text  = stringResource(R.string.label_color_materia),
                     style = MaterialTheme.typography.labelLarge,
                 )
                 ColorSelector(
@@ -114,7 +115,7 @@ fun DialogoMateria(
                         onClick  = onCancelar,
                         modifier = Modifier.weight(1f),
                     ) {
-                        Text("Cancelar", color = Color.Gray)
+                        Text(stringResource(R.string.btn_cancelar), color = Color.Gray)
                     }
 
                     Button(
@@ -122,10 +123,10 @@ fun DialogoMateria(
                         modifier = Modifier.weight(1f),
                         shape    = RoundedCornerShape(8.dp),
                         colors   = ButtonDefaults.buttonColors(
-                            containerColor = Color.Blue
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
                     ) {
-                        Text("Guardar", color = Color.White)
+                        Text(stringResource(R.string.btn_guardar), color = Color.White)
                     }
                 }
             }
@@ -142,23 +143,6 @@ private fun DialogoMateriaAgregarPreview() {
         profesor           = "",
         colorSeleccionado  = "4CAF50",
         error              = null,
-        onNombreChange     = {},
-        onProfesorChange   = {},
-        onColorChange      = {},
-        onGuardar          = {},
-        onCancelar         = {},
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun DialogoMateriaEditarPreview() {
-    DialogoMateria(
-        titulo             = "Editar Materia",
-        nombre             = "Cálculo Integral",
-        profesor           = "Prof. Sirgei",
-        colorSeleccionado  = "2196F3",
-        error              = "El nombre no puede estar vacío.",
         onNombreChange     = {},
         onProfesorChange   = {},
         onColorChange      = {},

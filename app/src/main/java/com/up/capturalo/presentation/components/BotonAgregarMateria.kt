@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.up.capturalo.R
 
 /**
  * Botón stateless que notifica al padre cuando el usuario quiere agregar una materia.
@@ -25,27 +27,30 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun BotonAgregarMateria(
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .width(175.dp)
             .height(50.dp),
-        shape  = RoundedCornerShape(6.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
+        shape  = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.tertiary
+        ),
         onClick = onClick,
     ) {
         Column(
             modifier            = Modifier
                 .fillMaxSize()
                 .padding(2.dp),
-            horizontalAlignment = Alignment.Start,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text  = "+ Agregar Materia",
+                text  = stringResource(R.string.btn_agregar_materia),
                 color = Color.White,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.titleSmall,
             )
         }
     }

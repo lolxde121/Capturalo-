@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">Capturalo!</string>
+    <string name="app_name">Captúralo!</string>
+    <string name="title_mis_materias">Mis Materias</string>
+    <string name="badge_activas">Activas</string>
+    <string name="btn_agregar_materia">+ Agregar Materia</string>
+    <string name="btn_guardar">Guardar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_salir">Salir</string>
+    <string name="label_nombre_materia">Nombre de la materia</string>
+    <string name="label_nombre_profesor">Nombre del profesor</string>
+    <string name="label_color_materia">Color de la materia:</string>
+    <string name="dialog_title_agregar">Agregar Materia</string>
+    <string name="dialog_title_editar">Editar Materia</string>
+    <string name="header_nueva_materia">Nueva Materia</string>
+    <string name="header_selecciona_ubicacion">Selecciona la Ubicación</string>
+    <string name="capturas_count_format">Capturas: %1$d</string>
+    <string name="cd_icono_camara">Abrir cámara</string>
+    <string name="cd_editar_materia">Editar materia</string>
+    <string name="cd_eliminar_materia">Eliminar materia</string>
+    <string name="cd_foto_capturada">Foto capturada</string>
+    <string name="cd_foto_ejemplo">Imagen de captura de ejemplo</string>
+    <string name="error_nombre_vacio">El nombre de la materia no puede estar vacío.</string>
 </resources>

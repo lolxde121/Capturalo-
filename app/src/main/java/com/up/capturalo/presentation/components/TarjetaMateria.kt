@@ -23,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.up.capturalo.R
 import com.up.capturalo.data.models.Materia
 import com.up.capturalo.utils.toComposeColor
 
@@ -48,9 +50,10 @@ fun TarjetaMateria(
     onEditar: (Materia) -> Unit = {},
     onEliminar: (Int) -> Unit = {},
     parseoColor: (String) -> Color = { it.toComposeColor() },
+    modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier  = Modifier
+        modifier  = modifier
             .width(225.dp)
             .height(200.dp)
             .padding(8.dp),
@@ -58,7 +61,7 @@ fun TarjetaMateria(
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column {
-            // Franja de color de la materia
+            // Franja superior con el color identificador de la materia
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,13 +78,13 @@ fun TarjetaMateria(
                 Text(materia.nombre,   style = MaterialTheme.typography.titleLarge)
                 Text(materia.profesor, style = MaterialTheme.typography.titleMedium)
 
-                // Badge de capturas
+                // Badge con el conteo de capturas
                 PildoraGris(
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .width(110.dp)
                         .height(20.dp),
-                    texto = "Capturas: $totalCapturas",
+                    texto = stringResource(R.string.capturas_count_format, totalCapturas),
                 )
 
                 // Botones de acción: editar / eliminar
@@ -93,15 +96,15 @@ fun TarjetaMateria(
                     IconButton(onClick = { onEditar(materia) }) {
                         Icon(
                             imageVector        = Icons.Default.Edit,
-                            contentDescription = "Editar materia",
+                            contentDescription = stringResource(R.string.cd_editar_materia),
                             tint               = Color.DarkGray,
                         )
                     }
                     IconButton(onClick = { onEliminar(materia.id) }) {
                         Icon(
                             imageVector        = Icons.Default.Delete,
-                            contentDescription = "Eliminar materia",
-                            tint               = Color.Red,
+                            contentDescription = stringResource(R.string.cd_eliminar_materia),
+                            tint               = MaterialTheme.colorScheme.error,
                         )
                     }
                 }
